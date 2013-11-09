@@ -24,9 +24,10 @@ mongoose.connect(uri_string, function (err, res) {
     }
 });
 
+var db = mongoose.connection;
 var Page  = mongoose.model('Page',{ url: String, 'gifs': [{ id: String, user_id: String, gif_url: String, category: String }] });
 
-var mike = new Page({ url: 'hi', 'gifs': [{ id: 'grr', user_id: 'brr', gif_url: 'boop', category: 'whomp'}] });
+/*var mike = new Page({ url: 'ah', 'gifs': [{ id: 'ad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
 mike.save(function (err) {
     if(err) {
         console.log("Oh no an error" + err);
@@ -35,7 +36,7 @@ mike.save(function (err) {
         console.log("meow");
     }
 });
-
+*/
 // CRUD
 
 // takes json given and saves it to the DB
@@ -51,20 +52,47 @@ app.get("/db/create/:page", function(req, response) {
     });
 });
 
-app.get("db/remove/gif/:page/:gif_id", function(req, response) {
+app.get("/db/read/:page", function(req, response) {
 
+    Page.find({'url': req.params['page']}, function(error, pages) {
+        console.log(pages[0].gifs);
+        response.send(JSON.stringify(pages[0].gifs));
+    });
+
+});
+
+app.get("/db/remove/:page/:gif_id", function(req, response) {
+
+    console.log("Last try");
+    Page.where({"url":"gah" }).update({}, { $pull : { gifs : { "id" : "cad" } } } ,false, false);
+
+    console.log(mike.gifs.remove());
+    mike.save(function(err) {
+        console.log("F this");
+    });
+
+    Page.update({}, { $pull : { gifs : { "id" : "cad" } } } ,false, false);
     // first query the database for a GIF with the corresponding ID
-    Page.findOne({'url':req.params['page']}, function(error, pages) {
-        pages.gifs.forEach(function(member, pages) {
+    Page.find({'url':req.params['page']}, function(error, pages) {
+        pages.forEach(function(member) {
+            console.log("I'm going through stuff! " + member);
             if(member.id === req.params['gif_id']) {
                 // remove from database
                 console.log("Yay now update the DB!! ---->" + member.id);
-                Page.pages.pull(member.id);
-                Page.save();
+                console.log(Page.doc);
+                Page.docs.forEach(function(element, index, array) {
+                    console.log("hello");
+                    console.log(element);
+                    console.log(index);
+                    console.log(array);
+                });
+
+                //Page.doc.array.pull(member.id);
+                //Page.doc.save();
 
             }
-        })
-    })
+        });
+    });
 
 });
 
