@@ -1,0 +1,23 @@
+{
+  "name": "hierogifics-server",
+  "version": "0.0.0",
+  "description": "Gif toolbelt server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+      "express": "3.1.x",
+      "request": "2.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/miketoth/hierogifics-server.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/miketoth/hierogifics-server"
+  }
+}
+
