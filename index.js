@@ -80,11 +80,7 @@ app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
         console.log(pages[0].gifs);
-        response.writeHead(200, {
-              "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
-        });
-        response.write(JSON.stringify(pages[0].gifs)); // changed from send to write
+        response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
     });
 
 });
@@ -141,7 +137,7 @@ app.get('/:gif_type', function(req, response) {
         }
     });
 
-    response.write(JSON.stringify(gif_response));
+    response.send(JSON.stringify(gif_response));
 
 });
 
