@@ -137,18 +137,14 @@ app.get('/:gif_type', function(req, response) {
 
     // implement # special search functionality
     request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=100&api_key=dc6zaTOxFJmzC", function(error, response, body) {
-        var json_response = "";
         if(error) {
             console.log("failed to query api");
         }
         else {
-            json_response = JSON.parse(body);
+            var json_response = JSON.parse(body);
             console.log(json_response);
             gif_response = json_response;
         }
-    }).
-        updateStatus(json_response, function(error, data){
-        console.log(data);
     });
 
     response.send(gif_response);
