@@ -49,18 +49,8 @@ app.get("/db/create/:page", function(req, response) {
    // var json_input = req.params['page'];
    // console.log(json_input['url']);
 
-    console.log(req.params['page']);
-            var new_page = new Page(JSON.parse(req.params['page']));
-            new_page.save(function(error) {
-                if(error) {
-                    console.log("Error creating new entry: " + error);
-                }
-                else {
-                    console.log("Successfully added a new page");
-                }
-            });
     // query the db
-/*    Page.find({'url': json_input['url']}, function(error, pages) {
+    Page.find({'url': json_input['url']}, function(error, pages) {
         console.log(pages);
         console.log(pages.length);
         var length = pages.length;
@@ -83,7 +73,7 @@ app.get("/db/create/:page", function(req, response) {
                 //if(pages[counter].id ==)
             }
         }
-    });*/
+    });
 });
 
 app.get("/db/read/:page", function(req, response) {
@@ -147,7 +137,7 @@ app.get('/:gif_type', function(req, response) {
         }
     });
 
-    response.send(gif_response);
+    response.write(JSON.stringify(gif_response));
 
 });
 
