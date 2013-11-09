@@ -6,7 +6,7 @@ var app = express();
 
 app.use(express.logger);
 
-app.get("/", function(req, response) {
+app.get("/hi", function(req, response) {
     response.send("Hello World");
 });
 
