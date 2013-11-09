@@ -40,16 +40,50 @@ mike.save(function (err) {
 // CRUD
 
 // takes json given and saves it to the DB
+// first check to see if the page exists, if it does
+// check if the gif alread exists. if it doesn't append it
+// to the list
 app.get("/db/create/:page", function(req, response) {
-    var new_page = new Page(JSON.parse(req.params['page']));
-    new_page.save(function(error) {
-        if(error) {
-            console.log("Error creating new entry: " + error);
+
+    // remember that the page is a json thing
+   // var json_input = req.params['page'];
+   // console.log(json_input['url']);
+
+    console.log(req.params['page']);
+            var new_page = new Page(JSON.parse(req.params['page']));
+            new_page.save(function(error) {
+                if(error) {
+                    console.log("Error creating new entry: " + error);
+                }
+                else {
+                    console.log("Successfully added a new page");
+                }
+            });
+    // query the db
+/*    Page.find({'url': json_input['url']}, function(error, pages) {
+        console.log(pages);
+        console.log(pages.length);
+        var length = pages.length;
+
+        // if there are no pages go ahead and make one
+        if (length == 0) {
+            var new_page = new Page(JSON.parse(req.params['page']));
+            new_page.save(function(error) {
+                if(error) {
+                    console.log("Error creating new entry: " + error);
+                }
+                else {
+                    console.log("Successfully added a new page");
+                }
+            });
         }
         else {
-            console.log("Successfully added a new page");
+            var counter =0;
+            for (counter=0;counter<length;counter++) {
+                //if(pages[counter].id ==)
+            }
         }
-    });
+    });*/
 });
 
 app.get("/db/read/:page", function(req, response) {
@@ -103,14 +137,18 @@ app.get('/:gif_type', function(req, response) {
 
     // implement # special search functionality
     request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=100&api_key=dc6zaTOxFJmzC", function(error, response, body) {
+        var json_response = "";
         if(error) {
             console.log("failed to query api");
         }
         else {
-            var json_response = JSON.parse(body);
+            json_response = JSON.parse(body);
             console.log(json_response);
             gif_response = json_response;
         }
+    }).
+        updateStatus(json_response, function(error, data){
+        console.log(data);
     });
 
     response.send(gif_response);
