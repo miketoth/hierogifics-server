@@ -8,7 +8,8 @@ app.get('/:gif_type', function(req, response) {
     response.send("Hello World");
     console.log("I see...");
 
-    request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=100&api_key=dc6zaTOxFJmzC", function(error, response, body) {
+  //  request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=100&api_key=dc6zaTOxFJmzC", function(error, response, body) {
+      request("http://api.giphy.com/v1/gifs/recent?api_key=dc6zaTOxFJmzC", function(error, response, body ) {
         if(error) {
             console.log("failed to query api");
         }
