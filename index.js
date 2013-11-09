@@ -6,8 +6,7 @@ var app = express();
 
 app.use(express.logger);
 
-app.get("/*", function(req, response) {
-
+app.get("/", function(req, response) {
     console.log("Yay!");
 });
 
