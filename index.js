@@ -80,7 +80,11 @@ app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
         console.log(pages[0].gifs);
-        response.send(JSON.stringify(pages[0].gifs));
+        response.writeHead(200, {
+              "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+        });
+        response.write(JSON.stringify(pages[0].gifs)); // changed from send to write
     });
 
 });
@@ -126,7 +130,7 @@ app.get("/db/remove/:page/:gif_id", function(req, response) {
 app.get('/:gif_type', function(req, response) {
 
     // implement # special search functionality
-    request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=100&api_key=dc6zaTOxFJmzC", function(error, response, body) {
+    request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=10&api_key=dc6zaTOxFJmzC", function(error, response, body) {
         if(error) {
             console.log("failed to query api");
         }
