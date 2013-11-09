@@ -15,7 +15,7 @@ app.get('/:gif_type', function(req, response) {
         }
         else {
             var json_response = JSON.parse(body);
-            response.send(json_response);
+            console.log(json_response);
         }
     });
 });
