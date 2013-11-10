@@ -122,7 +122,7 @@ app.get("/db/create/:page", function(req, response) {
 
         var length = 0;
 
-        if(pages[0] !== null && typeof pages[0] !== undefined) {
+        if(pages[0] !== null && pages[0] !== undefined) {
             length = pages[0].length; // there should only be one entry in the DB that matches
         }
 
@@ -151,12 +151,12 @@ app.get("/db/create/:page", function(req, response) {
 
             for(counter=0;counter<json_input.gifs.length;counter++) {
                 for (inner_counter=0;inner_counter<pages[0].gifs.length;inner_counter++) {
-                    if(pages[0].gifs[counter].id === json_input.gifs[inner_counter].id) {
+                    if(pages[0].gifs[inner_counter].id === json_input.gifs[counter].id) {
                         match = true;
                     }
                     else {
-                        match_val = counter;
-                        push_val = inner_counter;
+                        match_val = inner_counter;
+                        push_val = counter;
                     }
                 }
             }
