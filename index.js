@@ -115,8 +115,11 @@ app.get("/db/create/:page", function(req, response) {
 app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
-        console.log(pages[0].gifs);
-        response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
+
+        if(pages[0].gifs !== undefined && pages[0].gifs !== null) {
+            console.log(pages[0].gifs);
+            response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
+        }
     });
 
 });
