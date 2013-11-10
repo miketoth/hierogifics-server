@@ -27,7 +27,7 @@ mongoose.connect(uri_string, function (err, res) {
 var db = mongoose.connection;
 var Page  = mongoose.model('Page',{ url: String, 'gifs': [{ id: String, user_id: String, gif_url: String, category: String }] });
 
-/*var mike = new Page({ url: 'ah', 'gifs': [{ id: 'ad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
+/*var mike = new Page({ url: 'hah', 'gifs': [{ id: 'mad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
 mike.save(function (err) {
     if(err) {
         console.log("Oh no an error" + err);
@@ -37,6 +37,7 @@ mike.save(function (err) {
     }
 });
 */
+
 // CRUD
 
 // takes json given and saves it to the DB
@@ -46,18 +47,25 @@ mike.save(function (err) {
 app.get("/db/create/:page", function(req, response) {
 
     // remember that the page is a json thing
-   // var json_input = req.params['page'];
-   // console.log(json_input['url']);
+    var json_input = req.params['page'];
+
+    json_input = JSON.parse(json_input);
 
     // query the db
     Page.find({'url': json_input['url']}, function(error, pages) {
-        console.log(pages);
-        console.log(pages.length);
-        var length = pages.length;
+        // Breaks when nothing is in DB
+
+        var length = 0;
+
+        if(pages[0] !== null && pages[0] !== undefined) {
+            length = pages[0].length; // there should only be one entry in the DB that matches
+        }
+
+    // NOTE: there could be a page with no gifs in the DB because we remove gifs as the page changes, but still keep the page
 
         // if there are no pages go ahead and make one
         if (length == 0) {
-            var new_page = new Page(JSON.parse(req.params['page']));
+            var new_page = new Page(json_input);
             new_page.save(function(error) {
                 if(error) {
                     console.log("Error creating new entry: " + error);
@@ -67,11 +75,39 @@ app.get("/db/create/:page", function(req, response) {
                 }
             });
         }
+        // otherwise there is a page so add all gifs not present to the end of it
         else {
+            // iterate through all of the gifs and see if any of their ids match any of the ones passed in
+            var match = false;
             var counter =0;
-            for (counter=0;counter<length;counter++) {
-                //if(pages[counter].id ==)
+            var inner_counter = 0;
+            var match_val = -1;
+
+            for(counter=0;counter<json_input.gifs.length;counter++) {
+                for (inner_counter=0;inner_counter<pages[0].gifs.length;inner_counter++) {
+                    if(pages[0].gifs[counter].id === json_input.gifs[inner_counter].id) {
+                        match = true;
+                        match_val = inner_counter;
+                    }
+                }
             }
+                // if not already in list; add it!
+                if(!match) {
+
+                    var conditions = {'gifs': []}; // update all documents matching these parameters
+                    var update = {
+                        $push : { "gifs" : json_input.gifs[match_val] }
+                    };
+                    var options ={upsert: true};
+
+                    Page.update(conditions, update, options, function(err, numberAffected){
+                        console.log("Error: " + err + " numberAffected " + numberAffected);
+                    });
+
+                    // reset match
+                    match = false;
+                    match_val = -1;
+                }
         }
     });
 });
@@ -165,7 +201,7 @@ app.get('/sms/:number/:body', function(req, response) {
 
 });
 
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 24601;
 app.listen(port, function() {
     console.log("Listening on " + port);
 });
