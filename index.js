@@ -97,8 +97,7 @@ app.get("/db/create/:page", function(req, response) {
                 // if not already in list; add it!
                 if(!match) {
 
-                    console.log(json_input.gifs[push_val]);
-                    var conditions = {'gifs': json_input.gifs }; // update all documents matching these parameters
+                    var conditions = {'gifs': pages[0].gifs }; // update all documents matching these parameters
                     var update = { $push : { 'gifs' :  json_input.gifs[push_val]}} ;
                     var options ={upsert: true};
 
