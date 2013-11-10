@@ -38,6 +38,9 @@ mike.save(function (err) {
 });
 */
 
+//
+
+
 // CRUD
 
 // takes json given and saves it to the DB
@@ -56,7 +59,7 @@ app.get("/db/create/:page", function(req, response) {
 
         var length = 0;
 
-        if(pages[0] !== null && pages[0] !== undefined) {
+        if(pages[0] !== null && typeof(pages[0]) !== undefined) {
             length = pages[0].length; // there should only be one entry in the DB that matches
         }
 
@@ -117,8 +120,8 @@ app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
 
-        if(pages[0] !== undefined && pages[0] !== null) {
-            if(pages[0].gifs !== undefined && pages[0].gifs !== null) {
+        if(typeof(pages[0]) !== undefined && pages[0] !== null) {
+            if(typeof(pages[0].gifs) !== undefined && pages[0].gifs !== null) {
                 console.log(pages[0].gifs);
                 response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
             }
