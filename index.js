@@ -40,6 +40,7 @@ mike.save(function (err) {
 // Clues query
 // expect a valid url. Then will open the url and return a bunch of data about it as clues
 app.get("/clues/:url",function(req, response) {
+    var clues = [];
 
     request(req.params['url'], function(error, clientResponse, body) {
         if(error) {
@@ -47,23 +48,56 @@ app.get("/clues/:url",function(req, response) {
         }
         else {
             // get some information about the page and turn it into clues
-            console.log(clientResponse.headers); // not really useful but if you turn this into a learn stuff about the web thing. This will be cool
-            console.log(clientResponse.req.path); // break that into parts; each one can be a clue
 
-          /*  var clues = [
+            var length = clientResponse.req.path.length;
+            var path =[];
+            var temp = "";
+
+            for(var i=0; i<length;i++) {
+                // break on slash
+                if(clientResponse.req.path.charAt(i) === '/' && temp !== "") {
+                    path.push(temp);
+                    temp = "";
+                }
+                else if(clientResponse.req.path.charAt(i) === '/') {
+                    // ignore it
+                }
+                else {
+                    temp += clientResponse.req.path.charAt(i);
+                }
+
+                // if there are leftover characters on last iteration push them in
+                if(i === length-1 && temp !== "") {
+                    path.push(temp);
+                }
+            }
+
+          clues = [
                 {
                     "name": "content-length",
-                    "text": clientResponse.headers.content-length
-                },
-                {
-                    "name": "
-
-
-
-
-                    "
+                    "text": clientResponse.headers['content-length']
                 }
-            ]*/
+            ];
+
+            for(var i=0;i<path.length;i++) {
+
+                var json_path = {
+                    "name" : "path" + i,
+                    "text": path[i]
+                };
+
+                clues.push(json_path);
+            }
+
+            var give_it_away = {
+                "name": "url",
+                "text": req.params['url']
+            };
+            clues.push(give_it_away);
+            // iterate through clues
+
+            console.log(JSON.stringify(clues));
+            response.send(JSON.stringify(clues));
         }
     });
 
