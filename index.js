@@ -116,12 +116,16 @@ app.get("/db/create/:page", function(req, response) {
 app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
-
-        if(pages[0] !== undefined && pages[0] !== null) {
-            if(pages[0].gifs !== undefined && pages[0].gifs !== null) {
-                console.log(pages[0].gifs);
-                response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
-            }
+        if (error) {
+            response.send({"error": "Error querying database: " + error});
+            return;
+        } 
+        console.log(pages[0]);
+        if (pages[0]) {
+            response.send(pages[0].gifs); // changed from send to write
+        }
+        else {
+            response.send({"error": "No data for this url."});
         }
     });
 
