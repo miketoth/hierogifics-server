@@ -99,7 +99,7 @@ app.get("/db/create/:page", function(req, response) {
 
                     console.log(json_input.gifs[push_val]);
                     var conditions = {'gifs': json_input.gifs }; // update all documents matching these parameters
-                    var update = { $push : { 'gifs' :  json_input.gifs[push_val]} ;
+                    var update = { $push : { 'gifs' :  json_input.gifs[push_val]}} ;
                     var options ={upsert: true};
 
                     Page.update(conditions, update, options, function(err, numberAffected){
