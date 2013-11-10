@@ -27,7 +27,7 @@ mongoose.connect(uri_string, function (err, res) {
 var db = mongoose.connection;
 var Page  = mongoose.model('Page',{ url: String, 'gifs': [{ id: String, user_id: String, gif_url: String, category: String }] });
 
-/*var mike = new Page({ url: 'hah', 'gifs': [{ id: 'mad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
+var mike = new Page({ url: 'hah', 'gifs': [{ id: 'mad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
 mike.save(function (err) {
     if(err) {
         console.log("Oh no an error" + err);
@@ -36,7 +36,7 @@ mike.save(function (err) {
         console.log("meow");
     }
 });
-*/
+
 
 // CRUD
 
@@ -49,6 +49,7 @@ app.get("/db/create/:page", function(req, response) {
     // remember that the page is a json thing
     var json_input = req.params['page'];
 
+    console.log(json_input);
     json_input = JSON.parse(json_input);
 
     // query the db
