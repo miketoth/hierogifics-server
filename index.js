@@ -38,8 +38,8 @@ mike.save(function (err) {
 });
 */
 
-//
-
+// Clues query
+app.get("/clues/")
 
 // CRUD
 
@@ -59,7 +59,7 @@ app.get("/db/create/:page", function(req, response) {
 
         var length = 0;
 
-        if(pages[0] !== null && typeof(pages[0]) !== undefined) {
+        if(pages[0] !== null && typeof pages[0] !== undefined) {
             length = pages[0].length; // there should only be one entry in the DB that matches
         }
 
@@ -119,11 +119,12 @@ app.get("/db/create/:page", function(req, response) {
 app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
-
-        if(typeof(pages[0]) !== undefined && pages[0] !== null) {
-            if(typeof(pages[0].gifs) !== undefined && pages[0].gifs !== null) {
-                console.log(pages[0].gifs);
-                response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
+        if(typeof pages != undefined && pages !== null) {
+            if(typeof pages[0] !== undefined && pages[0] !== null) {
+                if(typeof pages[0].gifs !== undefined && pages[0].gifs !== null) {
+                    console.log(pages[0].gifs);
+                    response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
+                }
             }
         }
     });
