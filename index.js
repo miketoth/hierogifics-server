@@ -27,7 +27,7 @@ mongoose.connect(uri_string, function (err, res) {
 var db = mongoose.connection;
 var Page  = mongoose.model('Page',{ url: String, 'gifs': [{ id: String, user_id: String, gif_url: String, category: String }] });
 
-var mike = new Page({ url: 'hah', 'gifs': [{ id: 'mad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
+/*var mike = new Page({ url: 'hah', 'gifs': [{ id: 'mad', user_id: 'wooga', gif_url: 'dooga', category: 'zooga'}] });
 mike.save(function (err) {
     if(err) {
         console.log("Oh no an error" + err);
@@ -36,7 +36,7 @@ mike.save(function (err) {
         console.log("meow");
     }
 });
-
+*/
 
 // CRUD
 
@@ -47,10 +47,8 @@ mike.save(function (err) {
 app.get("/db/create/:page", function(req, response) {
 
     // remember that the page is a json thing
-    var json_input = req.params['page'];
-
-    console.log(json_input);
-    json_input = JSON.parse(json_input);
+    var json_input = JSON.parse(req.params['page']);
+    //json_input = JSON.parse(json_input);
 
     // query the db
     Page.find({'url': json_input['url']}, function(error, pages) {
@@ -83,22 +81,25 @@ app.get("/db/create/:page", function(req, response) {
             var counter =0;
             var inner_counter = 0;
             var match_val = -1;
+            var push_val = -1;
 
             for(counter=0;counter<json_input.gifs.length;counter++) {
                 for (inner_counter=0;inner_counter<pages[0].gifs.length;inner_counter++) {
                     if(pages[0].gifs[counter].id === json_input.gifs[inner_counter].id) {
                         match = true;
-                        match_val = inner_counter;
+                    }
+                    else {
+                        match_val = counter;
+                        push_val = inner_counter;
                     }
                 }
             }
                 // if not already in list; add it!
                 if(!match) {
 
-                    var conditions = {'gifs': []}; // update all documents matching these parameters
-                    var update = {
-                        $push : { "gifs" : json_input.gifs[match_val] }
-                    };
+                    console.log(json_input.gifs[push_val]);
+                    var conditions = {'gifs': json_input.gifs }; // update all documents matching these parameters
+                    var update = { $push : { 'gifs' :  json_input.gifs[push_val]} ;
                     var options ={upsert: true};
 
                     Page.update(conditions, update, options, function(err, numberAffected){
@@ -117,9 +118,11 @@ app.get("/db/read/:page", function(req, response) {
 
     Page.find({'url': req.params['page']}, function(error, pages) {
 
-        if(pages[0].gifs !== undefined && pages[0].gifs !== null) {
-            console.log(pages[0].gifs);
-            response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
+        if(pages[0] !== undefined && pages[0] !== null) {
+            if(pages[0].gifs !== undefined && pages[0].gifs !== null) {
+                console.log(pages[0].gifs);
+                response.send(JSON.stringify(pages[0].gifs)); // changed from send to write
+            }
         }
     });
 
