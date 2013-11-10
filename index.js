@@ -1,7 +1,6 @@
 var request = require("request");
 var express = require("express");
 var mongoose = require('mongoose');
-
 var app = express();
 
 var gif_response = "";
@@ -39,9 +38,37 @@ mike.save(function (err) {
 */
 
 // Clues query
-//app.get("/clues/",function(req, response) {
+// expect a valid url. Then will open the url and return a bunch of data about it as clues
+app.get("/clues/:url",function(req, response) {
 
-//});
+    request(req.params['url'], function(error, clientResponse, body) {
+        if(error) {
+            console.log("failed to query api");
+        }
+        else {
+            // get some information about the page and turn it into clues
+            console.log(clientResponse.headers); // not really useful but if you turn this into a learn stuff about the web thing. This will be cool
+            console.log(clientResponse.req.path); // break that into parts; each one can be a clue
+
+          /*  var clues = [
+                {
+                    "name": "content-length",
+                    "text": clientResponse.headers.content-length
+                },
+                {
+                    "name": "
+
+
+
+
+                    "
+                }
+            ]i*/
+        }
+    });
+
+
+});
 
 // CRUD
 
