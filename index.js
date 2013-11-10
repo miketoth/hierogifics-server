@@ -165,18 +165,15 @@ app.get("/db/remove/:page/:gif_id", function(req, response) {
 app.get('/:gif_type', function(req, response) {
 
     // implement # special search functionality
-    request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=10&api_key=dc6zaTOxFJmzC", function(error, response, body) {
+    request("http://api.giphy.com/v1/gifs/search?q=" + req.params["gif_type"] + "&limit=10&api_key=dc6zaTOxFJmzC", function(error, gifResponse, body) {
         if(error) {
             console.log("failed to query api");
         }
         else {
-            var json_response = JSON.parse(body);
-            console.log(json_response);
-            gif_response = json_response;
+            response.send(body);
         }
     });
 
-    response.send(JSON.stringify(gif_response));
 
 });
 
