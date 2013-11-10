@@ -39,7 +39,9 @@ mike.save(function (err) {
 */
 
 // Clues query
-app.get("/clues/")
+//app.get("/clues/",function(req, response) {
+
+//});
 
 // CRUD
 
